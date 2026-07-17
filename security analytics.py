@@ -46,15 +46,22 @@ class brute_force_check:
     def check_brute_force(self):
         line = self.log_lines[0]
         print(line)
+        ip_address = self.get_ip_address(line)
+        status_code = self.get_status_code(line)
 
+        print(f"IP Address: {ip_address}, Status Code: {status_code}")
+
+        
     
     def get_ip_address(self, line):
         ip = re.search("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line)
         if ip:
             return ip.group() 
         
-    def get_outcome(self, line):
-        pass
+    def get_status_code(self, line):
+        status_code = re.search("\s\d{3}\s", line)
+        if status_code:
+            return status_code.group()
 
 
 
