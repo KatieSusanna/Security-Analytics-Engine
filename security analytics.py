@@ -44,12 +44,23 @@ class brute_force_check:
         self.ip_attempts = {}
 
     def check_brute_force(self):
-        line = self.log_lines[0]
-        print(line)
-        ip_address = self.get_ip_address(line)
-        status_code = self.get_status_code(line)
 
-        print(f"IP Address: {ip_address}, Status Code: {status_code}")
+        
+
+        for line in self.log_lines:
+            ip_address = self.get_ip_address(line)
+            status_code = self.get_status_code(line)
+        
+
+            if ip_address in self.ip_attempts:
+                if status_code == " 404 ":
+                    self.ip_attempts[ip_address] += 1
+                elif status_code == " 200 ":
+                    attempt_count = self.ip_attempts[ip_address]
+                    if attempt_count > 5:
+                        print(f"Potential brute force attack detected from IP: {ip_address} with {attempt_count} failed attempts.")
+            elif status_code == " 404 ":
+                self.ip_attempts[ip_address] = 1
 
         
     
