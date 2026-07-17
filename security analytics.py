@@ -2,7 +2,7 @@ import re
 
 class ddos_check:
     def __init__(self, logs):
-        self.log_lines = logs.readlines()
+        self.log_lines = logs
         self.ip_timestamps = {}
 
     def check_ddos(self):
@@ -23,7 +23,7 @@ class ddos_check:
             if self.ip_timestamps[log] > 100:
                 print(f"Potential DDoS attack detected from IP: {log[0]} at {log[1]} with {self.ip_timestamps[log]} requests.")
                 ddos = True
-                
+
         if not ddos:
             print("No DDoS attack detected.")
             
@@ -37,11 +37,38 @@ class ddos_check:
         timestamp = re.search("\d{2}/[a-zA-Z]{3}/\d{4}:\d{2}:\d{2}:\d{2}", line)
         if timestamp:
             return timestamp.group()
+        
+class brute_force_check:
+    def __init__ (self, logs):
+        self.log_lines = logs
+        self.ip_attempts = {}
+
+    def check_brute_force(self):
+        line = self.log_lines[0]
+        print(line)
+
+    
+    def get_ip_address(self, line):
+        ip = re.search("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line)
+        if ip:
+            return ip.group() 
+        
+    def get_outcome(self, line):
+        pass
+
+
+
+    
+
+
 
 def main(): 
-    logs = open("logs.txt", "r")
-    checker = ddos_check(logs)
-    checker.check_ddos()
-    logs.close()
+    rawLogs = open("logs.txt", "r")
+    logs = rawLogs.readlines()
+    ddos_checker = ddos_check(logs)
+    ddos_checker.check_ddos()
+    brute_force_checker = brute_force_check(logs)
+    brute_force_checker.check_brute_force()
+    rawLogs.close()
 
 main() 
