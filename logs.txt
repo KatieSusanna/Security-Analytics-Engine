@@ -2109,3 +2109,5 @@
 192.0.2.158 - - [17/Jul/2026:04:23:48 +0000] "GET /healthz HTTP/1.1" 404 8484 "https://search.example/" "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0 Mobile Safari/537.36"
 192.0.2.158 - - [17/Jul/2026:04:23:48 +0000] "GET /healthz HTTP/1.1" 404 8484 "https://search.example/" "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0 Mobile Safari/537.36"
 192.0.2.158 - - [17/Jul/2026:04:23:48 +0000] "GET /healthz HTTP/1.1" 200 8484 "https://search.example/" "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0 Mobile Safari/537.36"
+127.0.0.1 - - [20/Jul/2026:12:38:01] "POST /login HTTP/1.1" 200 512
+127.0.0.1 - - [20/Jul/2026:12:38:35] "POST /login HTTP/1.1" 401 512
