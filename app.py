@@ -1,0 +1,33 @@
+from flask import Flask, request 
+from datetime import datetime
+
+
+app = Flask(__name__) 
+LOG_FILE = 'logs.txt'
+
+@app.after_request 
+def log_request(response):
+    ip = request.remote_addr
+    timestamp = datetime.now().strftime('%d/%b/%Y:%H:%M:%S')
+    method = request.method
+    path = request.path
+    status_code = response.status_code
+    log_entry = f"{ip} - - [{timestamp}] \"{method} {path} HTTP/1.1\" {status_code} 512"
+    with open(LOG_FILE, 'a') as f:
+        f.write(log_entry + "\n")
+
+    return response 
+
+@app.route("/login", methods=["POST"])
+def login(): 
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+
+    correct_username = "admin"
+    correct_password = "password123"
+
+    return "Login successful" if username == correct_username and password == correct_password else "Login failed", 200 if username == correct_username and password == correct_password else 401
+
+if __name__ == "__main__":
+        app.run (port=5000)
