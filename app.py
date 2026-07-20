@@ -31,10 +31,12 @@ def login():
 
     return "Login successful" if username == correct_username and password == correct_password else "Login failed", 200 if username == correct_username and password == correct_password else 401
 
-@app.route("/search", methods=["GET"]) 
+@app.route("/search", methods=["GET", "POST"]) 
 
 def search():
      query = request.args.get("q")
+     if request.method == "POST":
+         query = request.form.get("query")
      return f"Search results for: {query}", 200
 
 
