@@ -19,6 +19,8 @@ def log_request(response):
     return response 
 
 @app.route("/login", methods=["POST"])
+
+
 def login(): 
     username = request.form.get("username")
     password = request.form.get("password")
@@ -29,5 +31,13 @@ def login():
 
     return "Login successful" if username == correct_username and password == correct_password else "Login failed", 200 if username == correct_username and password == correct_password else 401
 
+@app.route("/search", methods=["GET"]) 
+
+def search():
+     query = request.args.get("q")
+     return f"Search results for: {query}", 200
+
+
 if __name__ == "__main__":
         app.run (port=5000)
+
