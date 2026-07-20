@@ -29,12 +29,12 @@ class ddos_check:
             
 
     def get_ip_address(self, line):
-        ip = re.search("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line)
+        ip = re.search(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line)
         if ip:
             return ip.group() 
 
     def get_timestamp(self, line):
-        timestamp = re.search("\d{2}/[a-zA-Z]{3}/\d{4}:\d{2}:\d{2}:\d{2}", line)
+        timestamp = re.search(r"\d{2}/[a-zA-Z]{3}/\d{4}:\d{2}:\d{2}:\d{2}", line)
         if timestamp:
             return timestamp.group()
         
@@ -50,27 +50,32 @@ class brute_force_check:
         for line in self.log_lines:
             ip_address = self.get_ip_address(line)
             status_code = self.get_status_code(line)
-        
+
+         
 
             if ip_address in self.ip_attempts:
+                if status_code == " 401 ":
+                    self.ip_attempts[ip_address] += 1
                 if status_code == " 404 ":
                     self.ip_attempts[ip_address] += 1
                 elif status_code == " 200 ":
                     attempt_count = self.ip_attempts[ip_address]
                     if attempt_count > 5:
                         print(f"Potential brute force attack detected from IP: {ip_address} with {attempt_count} failed attempts.")
+            elif status_code == " 401 ":
+                self.ip_attempts[ip_address] = 1
             elif status_code == " 404 ":
                 self.ip_attempts[ip_address] = 1
 
         
     
     def get_ip_address(self, line):
-        ip = re.search("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line)
+        ip = re.search(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line)
         if ip:
             return ip.group() 
         
     def get_status_code(self, line):
-        status_code = re.search("\s\d{3}\s", line)
+        status_code = re.search(r"\s\d{3}\s", line)
         if status_code:
             return status_code.group()
 
