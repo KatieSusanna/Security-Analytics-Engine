@@ -38,6 +38,13 @@ def search():
     print(f"Received search query: {query}")
     return f"Search results for: {query}", 200
 
+@app.route("/download", methods=["GET"])
+
+def download():
+    query = request.args.get("filename")
+    print(f"Received download query: {query}")
+    return f"Download results for: {query}", 200
+
 
 if __name__ == "__main__":
         app.run (port=5000)
