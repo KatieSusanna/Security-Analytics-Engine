@@ -81,7 +81,27 @@ class brute_force_check:
 
 
 
+class sqli_check: 
+    def __init__ (self, logs):
+        self.log_lines = logs
+        self.sus_words = ["DROP", "TABLE", "SELECT", "INSERT", "DELETE", "UPDATE", "WHERE", "OR", "AND", "--", ";", "admin", "1=1", "LIMIT", "ORDER BY"]
+
+    def check_sqli(self):
+        sqli = False
+        for line in self.log_lines:
+            path = self.get_path(line)
+            if path:
+                for word in self.sus_words:
+                    if word in path:
+                        print(f"Potential SQL Injection attempt detected in request: {line.strip()}")
+                        sqli = True
+                        break
+
     
+    def get_path(self, line):
+        path = re.search(r"http[s]?://[^\s]+", line)
+        if path:
+            return path.group(0)
 
 
 
@@ -92,6 +112,8 @@ def main():
     ddos_checker.check_ddos()
     brute_force_checker = brute_force_check(logs)
     brute_force_checker.check_brute_force()
+    sqli_checker = sqli_check(logs)
+    sqli_checker.check_sqli()
     rawLogs.close()
 
 main() 

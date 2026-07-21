@@ -8,5 +8,5 @@ for injection in sql_injections:
     payload = {"query": injection}
     response = requests.get(url, params={"q": injection})
     print(response)
-    # print(f"Payload: {injection} | Response Code: {response.status_code}")
+  
     
