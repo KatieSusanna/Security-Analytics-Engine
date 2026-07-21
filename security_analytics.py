@@ -103,7 +103,27 @@ class sqli_check:
         if path:
             return path.group(0)
 
+class traversal_check:
+    
+    def __init__(self, logs):
+        self.log_lines = logs
+        self.traversal_patterns = ["../", "..\\", "%2e%2e%2f", "%2e%2e\\", "..%2f", "..%5c"]
 
+    def check_traversal(self):
+        traversal = False
+        for line in self.log_lines:
+            path = self.get_path(line)
+            if path:
+                for pattern in self.traversal_patterns:
+                    if pattern in path:
+                        print(f"Potential Path Traversal attempt detected in request: {line.strip()}")
+                        traversal = True
+                        break
+
+    def get_path(self, line):
+        path = re.search(r"http[s]?://[^\s]+", line)
+        if path:
+            return path.group(0)
 
 def main(): 
     rawLogs = open("logs.txt", "r")
@@ -114,6 +134,8 @@ def main():
     brute_force_checker.check_brute_force()
     sqli_checker = sqli_check(logs)
     sqli_checker.check_sqli()
+    traversal_checker = traversal_check(logs)
+    traversal_checker.check_traversal()
     rawLogs.close()
 
 main() 

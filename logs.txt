@@ -322,3 +322,10 @@
 127.0.0.1 - - [20/Jul/2026:16:02:59] "POST http://127.0.0.1:5000/login HTTP/1.1" 401 512
 127.0.0.1 - - [20/Jul/2026:16:02:59] "POST http://127.0.0.1:5000/login HTTP/1.1" 401 512
 127.0.0.1 - - [20/Jul/2026:16:02:59] "POST http://127.0.0.1:5000/login HTTP/1.1" 401 512
+127.0.0.1 - - [21/Jul/2026:13:49:27] "GET http://127.0.0.1:5000/download?filename=../ HTTP/1.1" 404 512
+127.0.0.1 - - [21/Jul/2026:13:49:27] "GET http://127.0.0.1:5000/download?filename=../../ HTTP/1.1" 404 512
+127.0.0.1 - - [21/Jul/2026:13:49:27] "GET http://127.0.0.1:5000/download?filename=../../../etc/passwd HTTP/1.1" 404 512
+127.0.0.1 - - [21/Jul/2026:13:49:27] "GET http://127.0.0.1:5000/download?filename=../../../../../../etc/shadow HTTP/1.1" 404 512
+127.0.0.1 - - [21/Jul/2026:13:49:27] "GET http://127.0.0.1:5000/download?filename=..\..\windows\system32\config\sam HTTP/1.1" 404 512
+127.0.0.1 - - [21/Jul/2026:13:49:27] "GET http://127.0.0.1:5000/download?filename=%252e%252e%252f%252e%252e%252f HTTP/1.1" 404 512
+127.0.0.1 - - [21/Jul/2026:13:49:27] "GET http://127.0.0.1:5000/download?filename=..%252f..%252f+etc/passwd HTTP/1.1" 404 512
