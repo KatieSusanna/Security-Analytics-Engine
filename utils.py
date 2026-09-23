@@ -24,5 +24,6 @@ def get_path(line):
         if path:
             return path.group(0)
 
-def ip_generator(): 
-      pass
+def generate_ip():
+    random_number = random.randint(0, 2**32 - 1)
+    return str(ipaddress.IPv4Address(random_number))
