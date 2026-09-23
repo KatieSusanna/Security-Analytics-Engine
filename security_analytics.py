@@ -1,15 +1,17 @@
 import re
+from utils import get_ip_address, get_timestamp, get_status_code, get_path 
 
 class ddos_check:
     def __init__(self, logs):
         self.log_lines = logs
         self.ip_timestamps = {}
+        
 
     def check_ddos(self):
         ddos = False
         for line in self.log_lines:
-            ip_address = self.get_ip_address(line)
-            timestamp = self.get_timestamp(line)
+            ip_address = get_ip_address(line)
+            timestamp = get_timestamp(line)
 
             ip_timestamp = (ip_address, timestamp)
 
@@ -26,18 +28,9 @@ class ddos_check:
 
         if not ddos:
             print("No DDoS attack detected.")
-            
 
-    def get_ip_address(self, line):
-        ip = re.search(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line)
-        if ip:
-            return ip.group() 
 
-    def get_timestamp(self, line):
-        timestamp = re.search(r"\d{2}/[a-zA-Z]{3}/\d{4}:\d{2}:\d{2}:\d{2}", line)
-        if timestamp:
-            return timestamp.group()
-        
+
 class brute_force_check:
     def __init__ (self, logs):
         self.log_lines = logs
@@ -48,10 +41,9 @@ class brute_force_check:
         
 
         for line in self.log_lines:
-            ip_address = self.get_ip_address(line)
-            status_code = self.get_status_code(line)
+            ip_address = get_ip_address(line)
+            status_code = get_status_code(line)
 
-         
 
             if ip_address in self.ip_attempts:
                 if status_code == " 401 ":
@@ -62,22 +54,14 @@ class brute_force_check:
                     attempt_count = self.ip_attempts[ip_address]
                     if attempt_count > 5:
                         print(f"Potential brute force attack detected from IP: {ip_address} with {attempt_count} failed attempts.")
+                        self.ip_attempts[ip_address] = 0
+                elif status_code == "":
+                    print("Error: Status code not found in log line.")
             elif status_code == " 401 ":
                 self.ip_attempts[ip_address] = 1
             elif status_code == " 404 ":
                 self.ip_attempts[ip_address] = 1
 
-        
-    
-    def get_ip_address(self, line):
-        ip = re.search(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}", line)
-        if ip:
-            return ip.group() 
-        
-    def get_status_code(self, line):
-        status_code = re.search(r"\s\d{3}\s", line)
-        if status_code:
-            return status_code.group()
 
 
 
@@ -89,7 +73,7 @@ class sqli_check:
     def check_sqli(self):
         sqli = False
         for line in self.log_lines:
-            path = self.get_path(line)
+            path = get_path(line)
             if path:
                 for word in self.sus_words:
                     if word in path:
@@ -98,10 +82,7 @@ class sqli_check:
                         break
 
     
-    def get_path(self, line):
-        path = re.search(r"http[s]?://[^\s]+", line)
-        if path:
-            return path.group(0)
+    
 
 class traversal_check:
     
@@ -112,7 +93,7 @@ class traversal_check:
     def check_traversal(self):
         traversal = False
         for line in self.log_lines:
-            path = self.get_path(line)
+            path = get_path(line)
             if path:
                 for pattern in self.traversal_patterns:
                     if pattern in path:
@@ -120,10 +101,6 @@ class traversal_check:
                         traversal = True
                         break
 
-    def get_path(self, line):
-        path = re.search(r"http[s]?://[^\s]+", line)
-        if path:
-            return path.group(0)
 
 def main(): 
     rawLogs = open("logs.txt", "r")
