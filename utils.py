@@ -1,4 +1,6 @@
 import re
+import ipaddress
+import random
 
 
 def get_ip_address(line):
@@ -21,3 +23,6 @@ def get_path(line):
         path = re.search(r"http[s]?://[^\s]+", line)
         if path:
             return path.group(0)
+
+def ip_generator(): 
+      pass

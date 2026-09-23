@@ -5,6 +5,7 @@ class ddos_check:
     def __init__(self, logs):
         self.log_lines = logs
         self.ip_timestamps = {}
+        
 
     def check_ddos(self):
         ddos = False
@@ -53,6 +54,9 @@ class brute_force_check:
                     attempt_count = self.ip_attempts[ip_address]
                     if attempt_count > 5:
                         print(f"Potential brute force attack detected from IP: {ip_address} with {attempt_count} failed attempts.")
+                        self.ip_attempts[ip_address] = 0
+                elif status_code == "":
+                    print("Error: Status code not found in log line.")
             elif status_code == " 401 ":
                 self.ip_attempts[ip_address] = 1
             elif status_code == " 404 ":
@@ -69,7 +73,7 @@ class sqli_check:
     def check_sqli(self):
         sqli = False
         for line in self.log_lines:
-            path =get_path(line)
+            path = get_path(line)
             if path:
                 for word in self.sus_words:
                     if word in path:
@@ -89,7 +93,7 @@ class traversal_check:
     def check_traversal(self):
         traversal = False
         for line in self.log_lines:
-            path = self.get_path(line)
+            path = get_path(line)
             if path:
                 for pattern in self.traversal_patterns:
                     if pattern in path:
@@ -97,10 +101,6 @@ class traversal_check:
                         traversal = True
                         break
 
-    def get_path(self, line):
-        path = re.search(r"http[s]?://[^\s]+", line)
-        if path:
-            return path.group(0)
 
 def main(): 
     rawLogs = open("logs.txt", "r")
